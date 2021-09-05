@@ -8,11 +8,16 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
   constructor(private configService: ConfigService) {}
 
   createTypeOrmOptions(): TypeOrmModuleOptions {
+    const enviroment = this.configService.get('NODE_ENV');
+
     return {
       type: 'postgres',
       url: this.configService.get('DATABASE_URL'),
       entities: [join(__dirname, '..', '/**/*.entity{.ts,.js}')],
       synchronize: true,
+      extra: {
+        ssl: enviroment === 'production',
+      },
     };
   }
 }
