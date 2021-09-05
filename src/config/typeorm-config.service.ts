@@ -9,17 +9,14 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
 
   createTypeOrmOptions(): TypeOrmModuleOptions {
     const enviroment = this.configService.get('NODE_ENV');
+    const isProduction = enviroment === 'production';
 
     return {
       type: 'postgres',
       url: this.configService.get('DATABASE_URL'),
       entities: [join(__dirname, '..', '/**/*.entity{.ts,.js}')],
       synchronize: true,
-      ssl: enviroment === 'production',
-      extra: {
-        ssl: enviroment === 'production',
-        rejectUnauthorized: false,
-      },
+      ssl: isProduction ? { rejectUnauthorized: false } : undefined,
     };
   }
 }
