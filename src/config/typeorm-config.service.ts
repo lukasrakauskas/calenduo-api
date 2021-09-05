@@ -15,8 +15,10 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       url: this.configService.get('DATABASE_URL'),
       entities: [join(__dirname, '..', '/**/*.entity{.ts,.js}')],
       synchronize: true,
+      ssl: enviroment === 'production',
       extra: {
         ssl: enviroment === 'production',
+        rejectUnauthorized: false,
       },
     };
   }
