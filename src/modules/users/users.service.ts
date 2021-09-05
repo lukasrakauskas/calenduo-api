@@ -1,4 +1,5 @@
 import {
+  Body,
   HttpException,
   HttpStatus,
   Injectable,
@@ -17,7 +18,7 @@ export class UsersService {
     private passwordService: PasswordService,
   ) {}
 
-  async create(createUserDto: CreateUserDto) {
+  async create(@Body() createUserDto: CreateUserDto) {
     const emailInUse = await this.findByEmail(createUserDto.email);
 
     if (emailInUse) {
@@ -26,13 +27,8 @@ export class UsersService {
 
     const password = await this.passwordService.hash(createUserDto.password);
     const user = this.userRepository.create({ ...createUserDto, password });
-    await user.save();
-    return user;
-  }
 
-  async showById(id: number): Promise<User | undefined> {
-    const user = await this.findById(id);
-    return user;
+    return await user.save();
   }
 
   async findById(id: number) {
@@ -41,19 +37,5 @@ export class UsersService {
 
   async findByEmail(email: string) {
     return await this.userRepository.findOne({ where: { email } });
-  }
-
-  async validatePassword(email: string, password: string) {
-    const user = await this.findByEmail(email);
-    if (!user) {
-      throw new UnauthorizedException('Invalid credentials');
-    }
-
-    const isValid = await this.passwordService.compare(password, user.password);
-    if (!isValid) {
-      throw new UnauthorizedException('Invalid credentials');
-    }
-
-    return user;
   }
 }

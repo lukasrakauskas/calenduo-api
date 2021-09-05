@@ -13,6 +13,6 @@ export class UsersController {
 
   @Get(':id')
   show(@Param('id') id: string) {
-    return this.usersService.showById(+id);
+    return this.usersService.findById(+id);
   }
 }
