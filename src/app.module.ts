@@ -7,6 +7,7 @@ import { UsersModule } from './modules/users/users.module';
 import { PasswordsModule } from './modules/passwords/passwords.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { TypeOrmConfigService } from './config/typeorm-config.service';
+import { RolesModule } from './modules/roles/roles.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { TypeOrmConfigService } from './config/typeorm-config.service';
     PasswordsModule,
     UsersModule,
     AuthModule,
+    RolesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
