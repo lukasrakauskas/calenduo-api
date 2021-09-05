@@ -1,10 +1,4 @@
-import {
-  Body,
-  HttpException,
-  HttpStatus,
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Body, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PasswordService } from 'src/modules/passwords/password.service';
 import { Repository } from 'typeorm';
