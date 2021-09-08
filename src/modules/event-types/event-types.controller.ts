@@ -7,10 +7,12 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
-import { EventTypeService } from './event-type.service';
+import { EventTypeService } from './event-types.service';
 import { CreateEventTypeDto } from './dto/create-event-type.dto';
 import { UpdateEventTypeDto } from './dto/update-event-type.dto';
 import { CurrentUser } from 'src/common/decorators/current-user.decorator';
+import { Roles } from '../roles/decorators/roles.decorator';
+import { Role } from '../roles/enums/role.enum';
 import { User } from '../users/entities/user.entity';
 
 @Controller('event-type')
@@ -26,11 +28,13 @@ export class EventTypeController {
   }
 
   @Get()
-  findAll(@CurrentUser() user: User) {
-    return this.eventTypeService.findAll(user);
+  @Roles(Role.Admin)
+  findAll() {
+    return this.eventTypeService.findAll();
   }
 
   @Get(':id')
+  @Roles(Role.Admin)
   findOne(@Param('id') id: string) {
     return this.eventTypeService.findOne(+id);
   }
@@ -39,12 +43,13 @@ export class EventTypeController {
   update(
     @Param('id') id: string,
     @Body() updateEventTypeDto: UpdateEventTypeDto,
+    @CurrentUser() user: User,
   ) {
-    return this.eventTypeService.update(+id, updateEventTypeDto);
+    return this.eventTypeService.update(+id, updateEventTypeDto, user);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.eventTypeService.remove(+id);
+  remove(@Param('id') id: string, @CurrentUser() user: User) {
+    return this.eventTypeService.remove(+id, user);
   }
 }

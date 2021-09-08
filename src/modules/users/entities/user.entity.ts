@@ -1,6 +1,6 @@
 import { Exclude } from 'class-transformer';
 import { AbstractEntity } from 'src/common/entities/abstract.entity';
-import { EventType } from 'src/modules/event-type/entities/event-type.entity';
+import { EventType } from 'src/modules/event-types/entities/event-type.entity';
 import { Role } from 'src/modules/roles/enums/role.enum';
 import { Column, Entity, OneToMany } from 'typeorm';
 
