@@ -14,8 +14,10 @@ import { CurrentUser } from 'src/common/decorators/current-user.decorator';
 import { Roles } from '../roles/decorators/roles.decorator';
 import { Role } from '../roles/enums/role.enum';
 import { User } from '../users/entities/user.entity';
+import { ApiTags } from '@nestjs/swagger';
 
-@Controller('event-type')
+@ApiTags('event-types')
+@Controller('event-types')
 export class EventTypeController {
   constructor(private readonly eventTypeService: EventTypeService) {}
 
