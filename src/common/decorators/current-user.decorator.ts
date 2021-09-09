@@ -1,22 +1,16 @@
-import {
-  createParamDecorator,
-  ExecutionContext,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { createParamDecorator, ExecutionContext } from '@nestjs/common';
+import { User } from 'src/modules/users/entities/user.entity';
+import { BaseEntity } from 'typeorm';
 
-interface CurrentUserOptions {
-  required?: boolean;
-}
+type UserKeys = keyof Omit<
+  User,
+  keyof typeof BaseEntity | 'recover' | 'reload'
+>;
 
 export const CurrentUser = createParamDecorator(
-  (options: CurrentUserOptions = {}, context: ExecutionContext) => {
+  (key: UserKeys | null | undefined, context: ExecutionContext) => {
     const request = context.switchToHttp().getRequest();
     const user = request?.user;
-
-    if (options.required && !user) {
-      throw new UnauthorizedException();
-    }
-
-    return user;
+    return key != null ? user[key] : user;
   },
 );
