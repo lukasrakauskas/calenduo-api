@@ -8,7 +8,7 @@ import { UpdateEventTypeDto } from './dto/update-event-type.dto';
 import { EventType } from './entities/event-type.entity';
 
 @Injectable()
-export class EventTypeService {
+export class EventTypesService {
   constructor(
     @InjectRepository(EventType)
     private eventTypeRepository: Repository<EventType>,

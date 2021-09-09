@@ -8,7 +8,7 @@ import { PasswordsModule } from './modules/passwords/passwords.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { TypeOrmConfigService } from './config/typeorm-config.service';
 import { RolesModule } from './modules/roles/roles.module';
-import { EventTypeModule } from './modules/event-types/event-type.module';
+import { EventTypesModule } from './modules/event-types/event-types.module';
 
 @Module({
   imports: [
@@ -20,7 +20,7 @@ import { EventTypeModule } from './modules/event-types/event-type.module';
     UsersModule,
     AuthModule,
     RolesModule,
-    EventTypeModule,
+    EventTypesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

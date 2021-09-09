@@ -7,7 +7,7 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
-import { EventTypeService } from './event-types.service';
+import { EventTypesService } from './event-types.service';
 import { CreateEventTypeDto } from './dto/create-event-type.dto';
 import { UpdateEventTypeDto } from './dto/update-event-type.dto';
 import { CurrentUser } from 'src/common/decorators/current-user.decorator';
@@ -18,27 +18,27 @@ import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('event-types')
 @Controller('event-types')
-export class EventTypeController {
-  constructor(private readonly eventTypeService: EventTypeService) {}
+export class EventTypesController {
+  constructor(private readonly eventTypesService: EventTypesService) {}
 
   @Post()
   create(
     @Body() createEventTypeDto: CreateEventTypeDto,
     @CurrentUser() user: User,
   ) {
-    return this.eventTypeService.create(createEventTypeDto, user);
+    return this.eventTypesService.create(createEventTypeDto, user);
   }
 
   @Get()
   @Roles(Role.Admin)
   findAll() {
-    return this.eventTypeService.findAll();
+    return this.eventTypesService.findAll();
   }
 
   @Get(':id')
   @Roles(Role.Admin)
   findOne(@Param('id') id: string) {
-    return this.eventTypeService.findOne(+id);
+    return this.eventTypesService.findOne(+id);
   }
 
   @Patch(':id')
@@ -47,11 +47,11 @@ export class EventTypeController {
     @Body() updateEventTypeDto: UpdateEventTypeDto,
     @CurrentUser() user: User,
   ) {
-    return this.eventTypeService.update(+id, updateEventTypeDto, user);
+    return this.eventTypesService.update(+id, updateEventTypeDto, user);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string, @CurrentUser() user: User) {
-    return this.eventTypeService.remove(+id, user);
+    return this.eventTypesService.remove(+id, user);
   }
 }
