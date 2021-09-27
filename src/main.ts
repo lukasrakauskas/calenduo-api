@@ -10,8 +10,8 @@ async function bootstrap() {
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
 
   const config = new DocumentBuilder()
-    .setTitle('SaaS Boilerplate')
-    .setDescription('SaaS Boilerplate API')
+    .setTitle('Calenduo')
+    .setDescription('Calenduo API')
     .addBearerAuth()
     .setVersion('1.0')
     .build();
