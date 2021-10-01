@@ -9,6 +9,9 @@ import { AuthModule } from './modules/auth/auth.module';
 import { TypeOrmConfigService } from './config/typeorm-config.service';
 import { RolesModule } from './modules/roles/roles.module';
 import { EventTypesModule } from './modules/event-types/event-types.module';
+import { TeamsModule } from './modules/teams/teams.module';
+import { JobsModule } from './modules/jobs/jobs.module';
+import { ReviewsModule } from './modules/reviews/reviews.module';
 
 @Module({
   imports: [
@@ -21,6 +24,9 @@ import { EventTypesModule } from './modules/event-types/event-types.module';
     AuthModule,
     RolesModule,
     EventTypesModule,
+    TeamsModule,
+    JobsModule,
+    ReviewsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -19,9 +19,9 @@ export class UserEventTypesController {
     return this.eventTypesService.findAll(user);
   }
 
-  @Get(':id')
+  @Get(':eventId')
   @Public()
-  findOne(@Param('eventId') id: string) {
-    return this.eventTypesService.findOne(+id);
+  findOne(@Param('userId') userId: string, @Param('eventId') eventId: string) {
+    return this.eventTypesService.findOne(+eventId);
   }
 }
