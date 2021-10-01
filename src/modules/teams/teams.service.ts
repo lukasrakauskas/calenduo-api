@@ -29,8 +29,11 @@ export class TeamsService {
     return await this.teamRepository.find();
   }
 
-  async findOne(id: number) {
-    const team = await this.teamRepository.findOne(id);
+  async findOne(id: number, relations?: string[]) {
+    const team = await this.teamRepository.findOne(
+      id,
+      relations ? { relations } : undefined,
+    );
 
     if (team == null) throw new NotFoundException('Team not found');
 
@@ -38,12 +41,14 @@ export class TeamsService {
   }
 
   async update(id: number, updateTeamDto: UpdateTeamDto, user: User) {
-    if (updateTeamDto.slug && (await this.isSlugInUse(updateTeamDto.slug)))
-      throw new ConflictException('Slug already in use');
-
-    const team = await this.teamRepository.findOne(id);
+    const team = await this.teamRepository.findOne(id, {
+      relations: ['owner'],
+    });
 
     if (team == null) throw new NotFoundException('Team not found');
+
+    if (updateTeamDto.slug && (await this.isSlugInUse(updateTeamDto.slug)))
+      throw new ConflictException('Slug already in use');
 
     if (!this.isOwner(team, user))
       throw new ForbiddenException('You are not the owner of this team');
@@ -54,8 +59,14 @@ export class TeamsService {
   }
 
   async remove(id: number, user: User) {
-    const team = await this.teamRepository.findOne(id);
+    console.log(id, user);
+
+    const team = await this.teamRepository.findOne(id, {
+      relations: ['owner'],
+    });
+
     if (!team) throw new NotFoundException('Team not found');
+
     if (!this.isOwner(team, user))
       throw new ForbiddenException('You are not the owner of this team');
 

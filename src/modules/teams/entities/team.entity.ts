@@ -7,8 +7,8 @@ import {
   JoinColumn,
   JoinTable,
   ManyToMany,
+  ManyToOne,
   OneToMany,
-  OneToOne,
 } from 'typeorm';
 
 @Entity()
@@ -19,7 +19,7 @@ export class Team extends AbstractEntity {
   @Column({ unique: true })
   slug: string;
 
-  @OneToOne(() => User)
+  @ManyToOne(() => User, (user) => user.teams)
   @JoinColumn()
   owner: User;
 
