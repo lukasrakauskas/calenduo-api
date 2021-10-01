@@ -26,17 +26,17 @@
 //   }
 
 //   @Get(':id')
-//   findOne(@Param('id') id: string) {
-//     return this.jobsService.findOne(+id);
+//   findOne(@Param('id', ParseIntPipe) id: number) {
+//     return this.jobsService.findOne(id);
 //   }
 
 //   @Patch(':id')
-//   update(@Param('id') id: string, @Body() updateJobDto: UpdateJobDto) {
-//     return this.jobsService.update(+id, updateJobDto);
+//   update(@Param('id', ParseIntPipe) id: number, @Body() updateJobDto: UpdateJobDto) {
+//     return this.jobsService.update(id, updateJobDto);
 //   }
 
 //   @Delete(':id')
-//   remove(@Param('id') id: string) {
-//     return this.jobsService.remove(+id);
+//   remove(@Param('id', ParseIntPipe) id: number) {
+//     return this.jobsService.remove(id);
 //   }
 // }

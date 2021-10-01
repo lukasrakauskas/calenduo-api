@@ -1,4 +1,11 @@
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  ParseIntPipe,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { Roles } from '../roles/decorators/roles.decorator';
@@ -24,8 +31,8 @@ export class UsersController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.usersService.findById(+id);
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.usersService.findById(id);
   }
 
   // update(id: number, updateEventTypeDto: UpdateEventTypeDto) {

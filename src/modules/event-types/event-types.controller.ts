@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { EventTypesService } from './event-types.service';
 import { CreateEventTypeDto } from './dto/create-event-type.dto';
@@ -37,13 +38,13 @@ export class EventTypesController {
 
   @Get(':id')
   @Roles(Role.Admin)
-  findOne(@Param('id') id: string) {
-    return this.eventTypesService.findOne(+id);
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.eventTypesService.findOne(id);
   }
 
   @Patch(':id')
   update(
-    @Param('id') id: string,
+    @Param('id', ParseIntPipe) id: number,
     @Body() updateEventTypeDto: UpdateEventTypeDto,
     @CurrentUser() user: User,
   ) {
@@ -51,7 +52,7 @@ export class EventTypesController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string, @CurrentUser() user: User) {
+  remove(@Param('id', ParseIntPipe) id: number, @CurrentUser() user: User) {
     return this.eventTypesService.remove(+id, user);
   }
 }
