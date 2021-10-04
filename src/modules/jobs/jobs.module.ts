@@ -10,5 +10,6 @@ import { TeamJobsController } from './team-jobs.controller';
   imports: [TypeOrmModule.forFeature([Job]), TeamsModule],
   controllers: [TeamJobsController],
   providers: [JobsService],
+  exports: [JobsService],
 })
 export class JobsModule {}

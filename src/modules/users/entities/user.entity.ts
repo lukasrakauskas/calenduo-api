@@ -3,11 +3,12 @@ import { AbstractEntity } from 'src/common/entities/abstract.entity';
 import { EventType } from 'src/modules/event-types/entities/event-type.entity';
 import { Role } from 'src/modules/roles/enums/role.enum';
 import { Team } from 'src/modules/teams/entities/team.entity';
-import { Column, Entity, OneToMany } from 'typeorm';
+import { Column, Entity, Index, OneToMany } from 'typeorm';
 
 @Entity()
 export class User extends AbstractEntity {
-  @Column({ unique: true })
+  @Column()
+  @Index({ unique: true })
   email: string;
 
   @Column()

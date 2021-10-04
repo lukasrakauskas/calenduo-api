@@ -2,6 +2,7 @@ import { Body, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PasswordService } from 'src/modules/passwords/password.service';
 import { Repository } from 'typeorm';
+import { Role } from '../roles/enums/role.enum';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './entities/user.entity';
 
@@ -35,5 +36,13 @@ export class UsersService {
 
   async findAll() {
     return await this.userRepository.find();
+  }
+
+  hasRole(user: User, role: Role) {
+    return user.roles.includes(role);
+  }
+
+  isAdmin(user: User) {
+    return this.hasRole(user, Role.Admin);
   }
 }

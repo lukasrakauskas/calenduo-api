@@ -29,7 +29,7 @@ export class JobsService {
       teamId,
     });
 
-    return job;
+    return await this.jobRepository.save(job);
   }
 
   async findAll(teamId?: number) {
@@ -93,7 +93,7 @@ export class JobsService {
     if (!(await this.teamService.isMember(team, user)))
       throw new ForbiddenException('You are not a member of this team');
 
-    if (teamId != null && team.id !== teamId)
+    if (teamId != null && job.teamId !== teamId)
       throw new ForbiddenException(
         `Job with ID ${id} does not belong to team with ID ${teamId}`,
       );

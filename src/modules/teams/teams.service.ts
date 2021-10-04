@@ -59,8 +59,6 @@ export class TeamsService {
   }
 
   async remove(id: number, user: User) {
-    console.log(id, user);
-
     const team = await this.teamRepository.findOne(id, {
       relations: ['owner'],
     });
