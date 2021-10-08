@@ -17,7 +17,10 @@ export class Job extends AbstractEntity {
   @Column({ type: 'int', nullable: true })
   teamId: number;
 
-  @ManyToOne(() => Team, (team) => team.jobs)
+  @ManyToOne(() => Team, (team) => team.jobs, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'teamId' })
   team: Promise<Team>;
 

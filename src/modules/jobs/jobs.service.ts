@@ -74,9 +74,13 @@ export class JobsService {
         `Job with ID ${id} does not belong to team with ID ${teamId}`,
       );
 
-    const updatedJob = this.jobRepository.merge(job, updateJobDto);
+    // TODO: refactor to use teamId
+    const jobEntity = await this.jobRepository.findOne(id);
 
-    return await updatedJob.save();
+    return await this.jobRepository.save({
+      ...jobEntity,
+      ...updateJobDto,
+    });
   }
 
   async remove(id: number, user: User, teamId?: number) {
@@ -98,6 +102,12 @@ export class JobsService {
         `Job with ID ${id} does not belong to team with ID ${teamId}`,
       );
 
-    return await this.jobRepository.remove(job);
+    // TODO: refactor to use teamId
+    const jobEntity = await this.jobRepository.findOne(id);
+
+    if (jobEntity == null)
+      throw new NotFoundException(`Job with ID "${id}" not found`);
+
+    return await this.jobRepository.remove(jobEntity);
   }
 }

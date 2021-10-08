@@ -16,7 +16,10 @@ export class Review extends AbstractEntity {
   @Column({ type: 'int', nullable: true })
   jobId: number;
 
-  @ManyToOne(() => Job, (job) => job.reviews)
+  @ManyToOne(() => Job, (job) => job.reviews, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'jobId' })
   job: Promise<Job>;
 }

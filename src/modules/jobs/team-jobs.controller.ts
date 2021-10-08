@@ -14,47 +14,60 @@ import { UpdateJobDto } from './dto/update-job.dto';
 import { CurrentUser } from 'src/common/decorators/current-user.decorator';
 import { User } from '../users/entities/user.entity';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { TeamsService } from '../teams/teams.service';
 
 @ApiTags('team-jobs')
 @ApiBearerAuth()
 @Controller('teams/:teamId/jobs')
 export class TeamJobsController {
-  constructor(private readonly jobsService: JobsService) {}
+  constructor(
+    private readonly jobsService: JobsService,
+    private readonly teamsService: TeamsService,
+  ) {}
 
   @Post()
-  create(
+  async create(
     @Body() createJobDto: CreateJobDto,
     @Param('teamId', ParseIntPipe) teamId: number,
     @CurrentUser() user: User,
   ) {
-    return this.jobsService.create(createJobDto, teamId, user);
+    await this.teamsService.findOne(teamId);
+    return await this.jobsService.create(createJobDto, teamId, user);
   }
 
   @Get()
-  findAll(@Param('teamId') teamId: string) {
-    return this.jobsService.findAll(+teamId);
+  async findAll(@Param('teamId', ParseIntPipe) teamId: number) {
+    await this.teamsService.findOne(teamId);
+    return await this.jobsService.findAll(teamId);
   }
 
   @Get(':id')
-  findOne(
+  async findOne(
     @Param('id', ParseIntPipe) id: number,
     @Param('teamId', ParseIntPipe) teamId: number,
   ) {
-    return this.jobsService.findOne(id, teamId);
+    await this.teamsService.findOne(teamId);
+    return await this.jobsService.findOne(id, teamId);
   }
 
   @Patch(':id')
-  update(
+  async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateJobDto: UpdateJobDto,
     @CurrentUser() user: User,
     @Param('teamId', ParseIntPipe) teamId: number,
   ) {
-    return this.jobsService.update(id, updateJobDto, user, teamId);
+    await this.teamsService.findOne(teamId);
+    return await this.jobsService.update(id, updateJobDto, user, teamId);
   }
 
   @Delete(':id')
-  remove(@Param('id', ParseIntPipe) id: number, @CurrentUser() user: User) {
-    return this.jobsService.remove(id, user);
+  async remove(
+    @Param('id', ParseIntPipe) id: number,
+    @Param('teamId', ParseIntPipe) teamId: number,
+    @CurrentUser() user: User,
+  ) {
+    await this.teamsService.findOne(teamId);
+    return await this.jobsService.remove(id, user);
   }
 }
