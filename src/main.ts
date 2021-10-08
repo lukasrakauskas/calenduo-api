@@ -19,7 +19,7 @@ async function bootstrap() {
     .addBearerAuth()
     .setVersion('1.0')
     .addServer('http://localhost:3000')
-    .addServer('https://api.calenduo.com')
+    .addServer('http://api.calenduo.com')
     .build();
 
   const options: SwaggerCustomOptions = {
