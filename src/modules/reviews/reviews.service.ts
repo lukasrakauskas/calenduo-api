@@ -31,21 +31,31 @@ export class ReviewsService {
     return await this.reviewRepository.find(findOptions);
   }
 
-  async findOne(id: number) {
+  async findOne(id: number, jobId?: number) {
     const review = await this.reviewRepository.findOne(id);
 
     if (review == null) throw new NotFoundException('Review not found');
 
+    if (jobId != null && review.jobId !== jobId)
+      throw new ForbiddenException(
+        `Review with ID ${id} does not belong to job with ID ${jobId}`,
+      );
+
     return review;
   }
 
-  async update(id: number, updateReviewDto: UpdateReviewDto, user: User) {
+  async update(
+    id: number,
+    updateReviewDto: UpdateReviewDto,
+    user: User,
+    jobId?: number,
+  ) {
     if (!this.usersService.isAdmin(user))
       throw new ForbiddenException(
         'You are not authorized to perform this action',
       );
 
-    const review = await this.findOne(id);
+    const review = await this.findOne(id, jobId);
 
     const updatedReview = await this.reviewRepository.merge(
       review,
@@ -55,13 +65,13 @@ export class ReviewsService {
     return await this.reviewRepository.save(updatedReview);
   }
 
-  async remove(id: number, user: User) {
+  async remove(id: number, user: User, jobId?: number) {
     if (!this.usersService.isAdmin(user))
       throw new ForbiddenException(
         'You are not authorized to perform this action',
       );
 
-    const review = await this.findOne(id);
+    const review = await this.findOne(id, jobId);
 
     return await this.reviewRepository.remove(review);
   }

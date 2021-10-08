@@ -27,6 +27,8 @@ export class TeamJobReviewsController {
     private readonly teamService: TeamsService,
   ) {}
 
+  // TODO: refactor so if a resource is not found, it returns a 404, or if it doesnt belong to other resource throws an error
+
   @Post()
   async create(
     @Body() createReviewDto: CreateReviewDto,
@@ -45,7 +47,7 @@ export class TeamJobReviewsController {
   ) {
     await this.teamService.findOne(teamId);
     await this.jobService.findOne(jobId);
-    return this.reviewsService.findAll();
+    return this.reviewsService.findAll(jobId);
   }
 
   @Get(':id')
@@ -56,7 +58,7 @@ export class TeamJobReviewsController {
   ) {
     await this.teamService.findOne(teamId);
     await this.jobService.findOne(jobId);
-    return await this.reviewsService.findOne(id);
+    return await this.reviewsService.findOne(id, jobId);
   }
 
   @Patch(':id')
@@ -69,7 +71,7 @@ export class TeamJobReviewsController {
   ) {
     await this.teamService.findOne(teamId);
     await this.jobService.findOne(jobId);
-    return await this.reviewsService.update(id, updateReviewDto, user);
+    return await this.reviewsService.update(id, updateReviewDto, user, jobId);
   }
 
   @Delete(':id')
@@ -81,6 +83,6 @@ export class TeamJobReviewsController {
   ) {
     await this.teamService.findOne(teamId);
     await this.jobService.findOne(jobId);
-    return await this.reviewsService.remove(id, user);
+    return await this.reviewsService.remove(id, user, jobId);
   }
 }
