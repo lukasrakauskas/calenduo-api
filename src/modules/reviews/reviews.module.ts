@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Review } from './entities/review.entity';
-import { TeamJobReviewsController } from './team-job-reviews.controller';
+import { ReviewsController } from './reviews.controller';
 import { ReviewsService } from './reviews.service';
 import { JobsModule } from '../jobs/jobs.module';
 import { UsersModule } from '../users/users.module';
@@ -14,7 +14,7 @@ import { TeamsModule } from '../teams/teams.module';
     JobsModule,
     UsersModule,
   ],
-  controllers: [TeamJobReviewsController],
+  controllers: [ReviewsController],
   providers: [ReviewsService],
 })
 export class ReviewsModule {}

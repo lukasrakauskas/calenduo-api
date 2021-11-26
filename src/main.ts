@@ -3,6 +3,7 @@ import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 import {
   DocumentBuilder,
   SwaggerCustomOptions,
+  SwaggerDocumentOptions,
   SwaggerModule,
 } from '@nestjs/swagger';
 import { AppModule } from './app.module';
@@ -18,7 +19,7 @@ async function bootstrap() {
     .setDescription('Calenduo API')
     .addBearerAuth()
     .setVersion('1.0')
-    .addServer('http://localhost:3000')
+    .addServer('http://localhost:5000')
     .addServer('http://api.calenduo.com')
     .build();
 
@@ -28,9 +29,14 @@ async function bootstrap() {
     },
   };
 
-  const document = SwaggerModule.createDocument(app, config);
+  const documentOptions: SwaggerDocumentOptions = {
+    operationIdFactory: (_controllerKey: string, methodKey: string) =>
+      methodKey,
+  };
+
+  const document = SwaggerModule.createDocument(app, config, documentOptions);
   SwaggerModule.setup('swagger', app, document, options);
 
-  await app.listen(process.env.PORT || 3000);
+  await app.listen(process.env.PORT || 5000);
 }
 bootstrap();

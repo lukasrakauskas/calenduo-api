@@ -4,11 +4,11 @@ import { JobsService } from './jobs.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Job } from './entities/job.entity';
 import { TeamsModule } from '../teams/teams.module';
-import { TeamJobsController } from './team-jobs.controller';
+import { JobsController } from './jobs.controller';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Job]), TeamsModule],
-  controllers: [TeamJobsController],
+  controllers: [JobsController],
   providers: [JobsService],
   exports: [JobsService],
 })

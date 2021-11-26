@@ -1,5 +1,13 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  UnauthorizedException,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiException } from '@nanogiants/nestjs-swagger-api-exception-decorator';
 import { CurrentUser } from 'src/common/decorators/current-user.decorator';
 import { Public } from 'src/common/decorators/public.decorator';
 import { User } from '../users/entities/user.entity';
@@ -22,6 +30,7 @@ export class AuthController {
 
   @Get('/me')
   @ApiBearerAuth()
+  @ApiException(() => UnauthorizedException)
   async me(@CurrentUser() user: User) {
     return user;
   }

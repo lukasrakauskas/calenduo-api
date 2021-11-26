@@ -8,10 +8,11 @@ import { PasswordsModule } from './modules/passwords/passwords.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { TypeOrmConfigService } from './config/typeorm-config.service';
 import { RolesModule } from './modules/roles/roles.module';
-import { EventTypesModule } from './modules/event-types/event-types.module';
 import { TeamsModule } from './modules/teams/teams.module';
 import { JobsModule } from './modules/jobs/jobs.module';
 import { ReviewsModule } from './modules/reviews/reviews.module';
+import { RouterModule } from '@nestjs/core';
+import { routes } from './routes';
 
 @Module({
   imports: [
@@ -19,11 +20,11 @@ import { ReviewsModule } from './modules/reviews/reviews.module';
     TypeOrmModule.forRootAsync({
       useClass: TypeOrmConfigService,
     }),
+    RouterModule.register(routes),
     PasswordsModule,
     UsersModule,
     AuthModule,
     RolesModule,
-    EventTypesModule,
     TeamsModule,
     JobsModule,
     ReviewsModule,

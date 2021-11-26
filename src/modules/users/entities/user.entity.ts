@@ -1,6 +1,5 @@
 import { Exclude } from 'class-transformer';
 import { AbstractEntity } from 'src/common/entities/abstract.entity';
-import { EventType } from 'src/modules/event-types/entities/event-type.entity';
 import { Role } from 'src/modules/roles/enums/role.enum';
 import { Team } from 'src/modules/teams/entities/team.entity';
 import { Column, Entity, Index, OneToMany } from 'typeorm';
@@ -22,9 +21,6 @@ export class User extends AbstractEntity {
     default: [Role.User],
   })
   roles: Role[];
-
-  @OneToMany(() => EventType, (eventType) => eventType.user)
-  eventTypes: EventType[];
 
   @OneToMany(() => Team, (team) => team.owner)
   teams: Promise<Team[]>;
