@@ -5,6 +5,7 @@ import { classToPlain } from 'class-transformer';
 import { User } from 'src/modules/users/entities/user.entity';
 import { UsersService } from 'src/modules/users/users.service';
 import { PasswordService } from '../passwords/password.service';
+import { AccessTokenDto } from './dto/access-token.dto';
 import { LoginDto } from './dto/login.dto';
 
 @Injectable()
@@ -16,19 +17,15 @@ export class AuthService {
   ) {}
 
   // TODO: needs updating
-  async login(loginDto: LoginDto) {
+  async login(loginDto: LoginDto): Promise<AccessTokenDto> {
     const user = await this.validateUser(loginDto);
-
-    if (!user) return {};
 
     const userDto = classToPlain(user);
 
-    return {
-      access_token: this.jwtService.sign(userDto),
-    };
+    return { accessToken: this.jwtService.sign(userDto) };
   }
 
-  async validateUser({ email, password }: LoginDto): Promise<User | undefined> {
+  async validateUser({ email, password }: LoginDto): Promise<User> {
     const user = await this.usersService.findByEmail(email);
 
     if (!user) {

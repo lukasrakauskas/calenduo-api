@@ -21,8 +21,20 @@ export class TeamsService {
     if (await this.isSlugInUse(createTeamDto.slug))
       throw new ConflictException('Slug already in use');
 
-    const team = this.teamRepository.create({ ...createTeamDto, owner: user });
+    const team = this.teamRepository.create({
+      ...createTeamDto,
+      ownerId: user.id,
+    });
     return await team.save();
+  }
+
+  async findByUser(user: User) {
+    return await this.teamRepository
+      .createQueryBuilder('team')
+      .leftJoinAndSelect('team.members', 'members')
+      .leftJoinAndSelect('team.owner', 'owner')
+      .where('members.id = :userId OR owner.id = :userId', { userId: user.id })
+      .getMany();
   }
 
   async findAll() {
@@ -50,7 +62,7 @@ export class TeamsService {
     if (updateTeamDto.slug && (await this.isSlugInUse(updateTeamDto.slug)))
       throw new ConflictException('Slug already in use');
 
-    if (!this.isOwner(team, user))
+    if (user.id !== team.ownerId)
       throw new ForbiddenException('You are not the owner of this team');
 
     const updatedTeam = this.teamRepository.merge(team, updateTeamDto);
@@ -59,13 +71,11 @@ export class TeamsService {
   }
 
   async remove(id: number, user: User) {
-    const team = await this.teamRepository.findOne(id, {
-      relations: ['owner'],
-    });
+    const team = await this.teamRepository.findOne(id);
 
     if (!team) throw new NotFoundException('Team not found');
 
-    if (!this.isOwner(team, user))
+    if (user.id !== team.ownerId)
       throw new ForbiddenException('You are not the owner of this team');
 
     return await this.teamRepository.remove(team);
@@ -76,14 +86,10 @@ export class TeamsService {
     return team != null;
   }
 
-  public isOwner(team: Team, user: User) {
-    return team.owner.id === user.id;
-  }
-
   public async isMember(team: Team, user: User) {
     const members = await team.members;
     return (
-      this.isOwner(team, user) ||
+      user.id === team.ownerId ||
       members.some((member) => member.id === user.id)
     );
   }

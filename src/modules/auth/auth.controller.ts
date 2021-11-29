@@ -24,6 +24,7 @@ export class AuthController {
   @Post('/login')
   @Public()
   @UseGuards(LocalAuthGuard)
+  @ApiException(() => UnauthorizedException)
   async login(@Body() loginDto: LoginDto) {
     return this.authService.login(loginDto);
   }

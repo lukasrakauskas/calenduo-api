@@ -11,9 +11,16 @@ import {
 import { TeamsService } from './teams.service';
 import { CreateTeamDto } from './dto/create-team.dto';
 import { UpdateTeamDto } from './dto/update-team.dto';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiConflictResponse,
+  ApiOperation,
+  ApiTags,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
 import { CurrentUser } from 'src/common/decorators/current-user.decorator';
 import { User } from '../users/entities/user.entity';
+import { Exception } from 'src/common/exceptions';
 
 @ApiTags('teams')
 @ApiBearerAuth()
@@ -22,15 +29,17 @@ export class TeamsController {
   constructor(private readonly teamsService: TeamsService) {}
 
   @Post()
-  @ApiOperation({ operationId: 'createTeam ' })
+  @ApiOperation({ operationId: 'createTeam' })
+  @ApiUnauthorizedResponse({ type: () => Exception })
+  @ApiConflictResponse({ type: () => Exception })
   create(@Body() createTeamDto: CreateTeamDto, @CurrentUser() user: User) {
     return this.teamsService.create(createTeamDto, user);
   }
 
   @Get()
   @ApiOperation({ operationId: 'findAllTeams' })
-  findAll() {
-    return this.teamsService.findAll();
+  findAll(@CurrentUser() user: User) {
+    return this.teamsService.findByUser(user);
   }
 
   @Get(':id')
