@@ -18,7 +18,7 @@ export class TeamsService {
   ) {}
 
   async create(createTeamDto: CreateTeamDto, user: User) {
-    if (await this.isSlugInUse(createTeamDto.slug))
+    if (await this.isSlugInUse(createTeamDto))
       throw new ConflictException('Slug already in use');
 
     const team = this.teamRepository.create({
@@ -59,7 +59,7 @@ export class TeamsService {
 
     if (team == null) throw new NotFoundException('Team not found');
 
-    if (updateTeamDto.slug && (await this.isSlugInUse(updateTeamDto.slug)))
+    if (updateTeamDto.slug && (await this.isSlugInUse(team)))
       throw new ConflictException('Slug already in use');
 
     if (user.id !== team.ownerId)
@@ -81,9 +81,16 @@ export class TeamsService {
     return await this.teamRepository.remove(team);
   }
 
-  private async isSlugInUse(slug: string) {
-    const team = await this.teamRepository.findOne({ where: { slug } });
-    return team != null;
+  private async isSlugInUse(team: Partial<Team>) {
+    const existingTeam = await this.teamRepository.findOne({
+      where: { slug: team.slug },
+    });
+
+    if ('id' in team && existingTeam) {
+      return existingTeam.id !== team.id;
+    }
+
+    return existingTeam != null;
   }
 
   public async isMember(team: Team, user: User) {
