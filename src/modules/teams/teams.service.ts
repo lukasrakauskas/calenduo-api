@@ -52,6 +52,13 @@ export class TeamsService {
     return team;
   }
 
+  async findMembers(id: number) {
+    const team = await this.findOne(id, ['members', 'owner']);
+    const members = await team.members;
+    const owner = await team.owner;
+    return [...members, owner];
+  }
+
   async update(id: number, updateTeamDto: UpdateTeamDto, user: User) {
     const team = await this.teamRepository.findOne(id, {
       relations: ['owner'],

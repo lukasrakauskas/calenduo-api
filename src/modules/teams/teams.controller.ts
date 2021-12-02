@@ -63,4 +63,10 @@ export class TeamsController {
   remove(@Param('id', ParseIntPipe) id: number, @CurrentUser() user: User) {
     return this.teamsService.remove(id, user);
   }
+
+  @Get(':id/members')
+  @ApiOperation({ operationId: 'findTeamMembers' })
+  findMembers(@Param('id', ParseIntPipe) id: number) {
+    return this.teamsService.findMembers(id);
+  }
 }
