@@ -14,6 +14,15 @@ export class User extends AbstractEntity {
   @Exclude({ toPlainOnly: true })
   password: string;
 
+  @Column()
+  firstName: string;
+
+  @Column()
+  lastName: string;
+
+  @Column()
+  birthDate: Date;
+
   @Column({
     type: 'enum',
     enum: Role,
